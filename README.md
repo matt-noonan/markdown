@@ -1,11 +1,5 @@
-## Markdown for haskell
+## Tweaked `markdown`
 
-This is a haskell library for converting markdown to HTML. It's written in
-pure haskell. Also read the more technical description on [hackage].
-
-### Use with yesod
-
-For use with yesod, check out [yesod-text-markdown][ytm].
-
-[hackage]: http://hackage.haskell.org/package/markdown
-[ytm]: https://github.com/Tarrasch/yesod-text-markdown
+This is the Haskell `markdown` package, modified to make it easier to write
+markdown articles that will use MathJaX for rendering. Put text between
+`$` signs for inline LaTeX, or between `$$` for display LaTeX.

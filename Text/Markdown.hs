@@ -191,6 +191,8 @@ toHtmlI ms is0
                                 (<>) = mappend
                              in H.a H.! HA.href (H.toValue $ "#ref-" <> ishown)
                                     H.! HA.id (H.toValue $ "footnote-" <> ishown) $ H.toHtml $ "[" <> ishown <> "]"
+    go (InlineTeX t) = toMarkup ("\\(" `T.append` t `T.append` "\\)")
+    go (InlineTeXBlock t) = toMarkup ("$$" `T.append` t `T.append` "$$")
 
 -- | For external links, add the rel="nofollow" attribute
 --

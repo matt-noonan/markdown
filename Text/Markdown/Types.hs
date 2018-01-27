@@ -190,6 +190,8 @@ data Inline = InlineText Text
             | InlineItalic [Inline]
             | InlineBold [Inline]
             | InlineCode Text
+            | InlineTeX Text
+            | InlineTeXBlock Text
             | InlineHtml Text
             | InlineLink Text (Maybe Text) [Inline] -- ^ URL, title, content
             | InlineImage Text (Maybe Text) Text -- ^ URL, title, content

@@ -47,9 +47,13 @@ combine (InlineImage u t c:rest) = InlineImage u t c : combine rest
 combine (InlineHtml t:rest) = InlineHtml t : combine rest
 combine (InlineFootnote x:rest) = InlineFootnote x : combine rest
 combine (InlineFootnoteRef x:rest) = InlineFootnoteRef x : combine rest
+combine (InlineTeX x:InlineTeX y:rest) = combine (InlineTeX (x <> y):rest)
+combine (InlineTeX x:rest) = InlineTeX x : combine rest
+combine (InlineTeXBlock x:InlineTeXBlock y:rest) = combine (InlineTeXBlock (x <> y):rest)
+combine (InlineTeXBlock x:rest) = InlineTeXBlock x : combine rest
 
 specials :: [Char]
-specials = "*_`\\[]!<&{}"
+specials = "*_`\\[]!<&{}$"
 
 inlineAny :: RefMap -> Parser Inline
 inlineAny refs =
@@ -71,6 +75,7 @@ inline refs =
     <|> autoLink
     <|> html
     <|> entity
+    <|> inlineTexBlock <|> inlineTex
   where
     inlinesTill :: Text -> Parser [Inline]
     inlinesTill end =
@@ -92,6 +97,9 @@ inline refs =
     doubleCodeSpace = InlineCode . T.pack <$> (string "`` " *> manyTill anyChar (string " ``"))
     doubleCode = InlineCode . T.pack <$> (string "``" *> manyTill anyChar (string "``"))
     code = InlineCode <$> (char '`' *> takeWhile1 (/= '`') <* char '`')
+
+    inlineTexBlock = InlineTeXBlock <$> (string "$$" *> takeWhile1 (/= '$') <* string "$$")
+    inlineTex = InlineTeX <$> (char '$' *> takeWhile1 (/= '$') <* char '$')
 
     footnoteRef = InlineFootnoteRef <$> (char '{' *> decimal <* char '}')
     footnote = InlineFootnote <$> (string "{^" *> decimal <* char '}')
